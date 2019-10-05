@@ -32,6 +32,12 @@ export const Content = styled.div`
       }
     }
 
+    .error {
+      color: #fff;
+      margin: 12px 0;
+      font-weight: bold;
+    }
+
     button {
       background: #3b9aff;
       border-radius: 4px;
