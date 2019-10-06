@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import logo from '~/assets/logo.svg';
+import { signUpRequest } from '~/store/modules/auth/actions';
 
 export default function SingUp() {
   const [name, setName] = useState('');
   const [email, setMail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState('');
-
+  const dispatch = useDispatch();
+  const loading = useSelector(state => state.auth.loading);
   /**
    * Error schema validation
    */
@@ -23,12 +26,20 @@ export default function SingUp() {
       .required('💩 Password is required'),
   });
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
+
     setErrors('');
-    loginSchema.validate({ name, email, password }).catch(err => {
+    let isValid = true;
+
+    await loginSchema.validate({ name, email, password }).catch(err => {
       setErrors(err.message);
+      isValid = false;
     });
+
+    if (!isValid) return;
+
+    dispatch(signUpRequest(name, email, password));
   };
   return (
     <>
@@ -53,7 +64,7 @@ export default function SingUp() {
           onChange={e => setPassword(e.target.value)}
         />
         {errors.length > 0 && <span className="error">{errors}</span>}
-        <button type="submit">Submit</button>
+        <button type="submit">{loading ? 'Loading...' : 'Submit'}</button>
         <Link to="/">I already have an account</Link>
       </form>
     </>
