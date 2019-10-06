@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import logo from '~/assets/logo.svg';
+import { signInRequest } from '~/store/modules/auth/actions';
 
 export default function SingIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState('');
-
+  const dispatch = useDispatch();
+  const loading = useSelector(state => state.auth.loading);
   /**
    * Error schema validation
    */
@@ -25,9 +28,18 @@ export default function SingIn() {
    */
   const handleSubmit = async e => {
     e.preventDefault();
+
+    setErrors('');
+    let isValid = true;
+
     await authSchema.validate({ email, password }).catch(err => {
       setErrors(err.message);
+      isValid = false;
     });
+
+    if (!isValid) return;
+
+    dispatch(signInRequest(email, password));
   };
 
   return (
@@ -48,7 +60,7 @@ export default function SingIn() {
           onChange={e => setPassword(e.target.value)}
         />
         {errors.length > 0 && <span className="error">{errors}</span>}
-        <button type="submit">Submit</button>
+        <button type="submit">{loading ? 'Loading...' : 'Submit'}</button>
         <Link to="/register">Create an account</Link>
       </form>
     </>
