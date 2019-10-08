@@ -13,7 +13,7 @@
 > Install all the project's dependencies running the command below.
 
 ```sh
-yarn or npm install
+yarn
 ```
 
 ## Usage
