@@ -12,6 +12,8 @@ export default createGlobalStyle`
   }
 
   html, body, #root {
+    min-height: 1000px;
+    max-height: 1000px;
     height: 100%;
   }
 
