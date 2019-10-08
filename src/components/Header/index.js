@@ -8,7 +8,6 @@ import Notifications from '~/components/Notifications';
 
 export default function Header() {
   const profile = useSelector(state => state.user.profile);
-  console.tron.log(profile);
   return (
     <Container>
       <Content>
